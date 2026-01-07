@@ -1838,7 +1838,7 @@ data:
       }
     }
     filter {
-      if [kubernetes][container][name]== "nginx-ingress-controller" {
+      if [kubernetes][container][name] == "nginx-ingress-controller" {
         json {
           source => "message"
           target => "ingress_log"
@@ -1965,7 +1965,7 @@ data:
         }
       }
       mutate {
-        remove => {"kubernetes","k8s"}
+        rename => ["kubernetes","k8s"]
         remove_field => "beat"
         remove_field => "tmp"
         remove_field => "[k8s][labels][app]"
@@ -2241,7 +2241,7 @@ apiVersion: networking.k8s.io/v1
 kind: Ingress
 metadata:
   name: kibana
-  namespace: kube-logging
+  namespace: kube-logging 
 spec:
   ingressClassName: nginx
   rules:

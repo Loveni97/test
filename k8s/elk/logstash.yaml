@@ -136,8 +136,86 @@ data:
         }
       
       }
-      
-      
+      # 处理以srv开头的业务服务日志
+      if [kubernetes][container][name] =~ /^srv*/ {
+        json {
+          source => "message"
+          target => "tmp"
+        }
+        if [kubernetes][namespace] == "kube-logging" {
+            drop{}
+        }
+        if [tmp][level] {
+          mutate{
+            add_field => {"[applog][level]" => "%{[tmp][level]}"}
+          }
+          if [applog][level] == "debug" {
+            drop{}
+          }
+        }
+        if [tmp][msg] {
+          mutate {
+            add_field => {"[apptog][msg]" => "%{[tmp][msg]}"}
+          }
+        }
+        if [tmp][func] {
+          mutate {
+            add_field => {"[apptog][func]" => "%{[tmp][func]}"}
+          }
+        }
+        
+        if [tmp][cost] {
+          if "ms" in [tmp][cost] {
+            mutate {
+              split => ["[tmp][cost]","m"]
+              add_field => {"[epplog][cost]" => "%{[tmp][cost][0]}"}
+              convert => ["[applog][cost]","float"]
+            }
+          } else {
+            mutate {
+              add_field => {"[applog][cost]" => "%{[tmp][cost]}"}
+            }
+          } 
+        }
+        
+        if [tmp][method] {
+          mutate {
+            add_field => {"[applog][method]" => "%{[tmp][method]}"}
+          }
+        }
+        if [tmp][request_url] {
+          mutate {
+            add_field => {"[applog][request_url]" => "%{[tmp][request_url]}"}
+          }
+        }
+        if [tmp][meta._id] {
+          mutate {
+            add_field => {"[applog][traceId]" => "%{[tmp][meta._id]}"}  
+          }
+        }
+        if [tmp][project] {
+          mutate {
+            add_field => {"[applog][project]" => "%{[tmp][project]}"}
+          }
+        }
+        if [tmp][time] {
+          mutate {
+            add_field => {"[applog][time]" => "%{[tmp][time]}"}
+          }
+        }
+        if [tmp][status] {
+          mutate {
+            add_field => {"[applog][status]" => "%{[tmp][status]}"}
+            convert => ["[applog][status]", "float"]
+          }
+        }
+      }
+      mutate {
+        rename => ["kubernetes","k8s"]
+        remove_field => "beat"
+        remove_field => "tmp"
+        remove_field => "[k8s][labels][app]"
+      }
    
     }
 

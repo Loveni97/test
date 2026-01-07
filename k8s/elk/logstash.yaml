@@ -85,7 +85,7 @@ data:
       }
     }
     filter {
-      if [kubernetes][container][name]== "nginx-ingress-controller" {
+      if [kubernetes][container][name] == "nginx-ingress-controller" {
         json {
           source => "message"
           target => "ingress_log"

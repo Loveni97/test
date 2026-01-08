@@ -2254,4 +2254,4 @@ spec:
           service:
             name: kibana
             port:
-              number: 5601
+              number: 5601 

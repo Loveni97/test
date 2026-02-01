@@ -784,4 +784,65 @@ sudo systemctl daemon-reload
 sudo systemctl restart docker
 
 
+# centos8 yum源配置
+
+# 创建备份目录
+mkdir -p /etc/yum.repos.d/bak
+
+# 移动所有默认 .repo 文件到备份目录
+mv /etc/yum.repos.d/*.repo /etc/yum.repos.d/bak/
+# 下载 CentOS 8.5 版本 repo 文件（适配绝大多数 CentOS 8 系统）
+wget https://mirrors.aliyun.com/repo/Centos-8.repo
+
+若下载不了vim /etc/yum.repos.d/Centos-8.repo
+
+[base]
+name=Centos-8 - Base - mirrors.aliyun.com
+baseurl=https://mirrors.aliyun.com/centos-vault/8.5.2111/BaseOS/$basearch/os/
+gpgcheck=1
+gpgkey=https://mirrors.aliyun.com/centos-vault/8.5.2111/RPM-GPG-KEY-CentOS-Official
+
+[appstream]
+name=Centos-8 - AppStream - mirrors.aliyun.com
+baseurl=https://mirrors.aliyun.com/centos-vault/8.5.2111/AppStream/$basearch/os/
+gpgcheck=1
+gpgkey=https://mirrors.aliyun.com/centos-vault/8.5.2111/RPM-GPG-KEY-CentOS-Official
+
+[extras]
+name=Centos-8 - Extras - mirrors.aliyun.com
+baseurl=https://mirrors.aliyun.com/centos-vault/8.5.2111/extras/$basearch/os/
+gpgcheck=1
+gpgkey=https://mirrors.aliyun.com/centos-vault/8.5.2111/RPM-GPG-KEY-CentOS-Official
+
+[powertools]
+name=Centos-8 - PowerTools - mirrors.aliyun.com
+baseurl=https://mirrors.aliyun.com/centos-vault/8.5.2111/PowerTools/$basearch/os/
+gpgcheck=1
+gpgkey=https://mirrors.aliyun.com/centos-vault/8.5.2111/RPM-GPG-KEY-CentOS-Official
+
+
+# 1. 清理旧的 yum 缓存
+dnf clean all
+
+# 2. 生成新的 yum 缓存（耗时根据网络速度而定，耐心等待）
+dnf makecache
+
+# 若提示「GPG 密钥验证成功」，说明缓存生成正常
+
+
+
+# 1. 安装 EPEL 源（阿里云镜像）
+dnf install -y https://mirrors.aliyun.com/epel/epel-release-latest-8.noarch.rpm
+
+# 2. 编辑 EPEL 配置文件，替换为阿里云镜像（默认可能是官方源）
+sed -i 's|^baseurl=.*|baseurl=https://mirrors.aliyun.com/epel/$releasever/$basearch/|' /etc/yum.repos.d/epel.repo
+sed -i 's|^#baseurl=.*|#baseurl=.*|' /etc/yum.repos.d/epel.repo
+sed -i 's|^mirrorlist=.*|#mirrorlist=.*|' /etc/yum.repos.d/epel.repo
+
+# 3. 生成 EPEL 缓存
+dnf makecache
+
+# 4. 验证 EPEL 源（安装一个 EPEL 中的软件，如 htop）
+dnf install -y htop
+
 

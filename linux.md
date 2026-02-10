@@ -243,12 +243,12 @@ become_ask_pass = false
 ## playbook
 格式：
 ---
--name: test
- hosts: servera #主机组名
- tasks:
-  - name: debug module for testing #task名
-   ansible.built.debug: # 模块名
-    var: result # result是变量名
+- name: test
+  hosts: servera #主机组名
+  tasks:
+    - name: debug module for testing #task名
+      ansible.built.debug: # 模块名
+        var: result # result是变量名
 
 ### 管理变量
 1.普通变量
@@ -261,7 +261,7 @@ become_ask_pass = false
       hosts: servera # 主机组名
       tasks:
         - name: debug module for testing # task名
-          ansible.built.debug: # 模块名
+          debug: # 模块名
             var: result # result是变量名
 
     在inventory中定义
@@ -278,7 +278,7 @@ become_ask_pass = false
         result: this is playbook vars # 这边直接赋值
       tasks:
         - name: debug module for testing # task名
-          ansible.built.debug: # 模块名
+          debug: # 模块名
             var: result # result是变量名
 
     使用：ansible-playbook vars.yml
@@ -291,7 +291,7 @@ become_ask_pass = false
       hosts: servera # 主机组名
       tasks:
         - name: debug module for testing # task名
-          ansible.builtin.debug: # 模块名
+          debug: # 模块名
             var: result # result是变量名
 
     使用：ansible-playbook vars.yml -e "result=glab"
@@ -307,7 +307,7 @@ become_ask_pass = false
   become: false
   tasks: 
     - name: connect to intranet web server
-      ansible.builtin.url:
+      ansible.builtin.uri:
         url: http://servera.lab.example.com
         return_content: yes
         status_code: 200

@@ -649,6 +649,21 @@ collections_paths =~/.ansible/collections:/usr/share/ansible/collections
 1. 删除之前的阿里云源配置（避免冲突）
 sudo rm -f /etc/yum.repos.d/CentOS-Stream-9.repo
 
+新建aliyun镜像
+sudo vim aliyun_yum.repo
+
+[ali_baseos]
+name=ali_baseos
+baseurl=https://mirrors.aliyun.com/centos-stream/9-stream/BaseOS/x86_64/os/
+gpgcheck=0
+ 
+[ali_appstream]
+name=ali_appstream
+baseurl=https://mirrors.aliyun.com/centos-stream/9-stream/AppStream/x86_64/os/
+gpgcheck=0
+ 
+
+
 2. 新建清华源 repo 文件
 sudo vi /etc/yum.repos.d/CentOS-Stream-9-Tsinghua.repo
 

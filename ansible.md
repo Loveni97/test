@@ -48,4 +48,4 @@ ansible all -m copy -a "src=/tmp/local.txt dest=/tmp/remote.txt mode=0644"
     dest: /tmp/remote.txt  # 远程节点目标路径
     mode: 0644
 
-
+ 

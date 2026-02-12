@@ -1,3 +1,4 @@
+# 一、文件管理
 1.安装软件
 ansible all -m dnf -a "name=nginx state=present" 安装
 ansible all -m dnf -a "name=nginx state=absent" 卸载
@@ -47,5 +48,8 @@ ansible all -m copy -a "src=/tmp/local.txt dest=/tmp/remote.txt mode=0644"
     src: /tmp/local.txt  # 控制节点本地文件路径
     dest: /tmp/remote.txt  # 远程节点目标路径
     mode: 0644
+
+# 二、用户管理
+1.
 
  

@@ -114,4 +114,17 @@ usermod -aG wheel testuser
 
 
 5.批量管理多个用户（循环方式）
-
+- name: 批量创建用户
+  hosts: all
+  tasks:
+    - name: 批量创建dev组下的多个用户
+      ansible.builtin.user:
+        name: "{{ item.name }}"
+        uid: "{{ item.uid }}"
+        group: dev
+        shell: /bin/bash
+        create_home: yes
+      loop:                     # 循环列表，批量处理
+        - { name: user1, uid: 10087 }
+        - { name: user2, uid: 10088 }
+        - { name: user3, uid: 10089 }

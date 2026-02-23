@@ -50,6 +50,68 @@ ansible all -m copy -a "src=/tmp/local.txt dest=/tmp/remote.txt mode=0644"
     mode: 0644
 
 # 二、用户管理
-1.
+1.创建用户
+1.1 ansible all -m user -a "name=testuser shell=/bin/bash create_home=yes"
 
- 
+2.设置密码
+echo "123" | openssl passwd -6 -stdin  # -6表示SHA512加密（主流Linux推荐）
+
+编辑ansible文件
+- name: 为testuser设置加密密码
+  hosts: all
+  tasks:
+    - name: 修改用户密码
+      ansible.builtin.user:
+        name: testuser
+        password: "$6$xxxxxxxxx$xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx"  # 替换为步骤1生成的加密串
+        update_password: always  # 每次执行都更新密码（默认on_create，仅创建时设置）
+
+
+创建单个用户示例（playbook写法）
+- name: 创建系统用户
+  hosts: all
+  tasks:
+    - name: 创建用户testuser，指定UID、家目录和shell
+      ansible.builtin.user:
+        name: testuser          # 用户名（必选）
+        uid: 10086              # 指定UID，避免自动分配冲突
+        home: /home/testuser    # 家目录路径
+        shell: /bin/bash        # 登录shell（默认/bin/bash）
+        create_home: yes        # 自动创建家目录（默认yes）
+        state: present          # 确保用户存在（默认present）
+        system: no              # 是否为系统用户（默认no，系统用户UID通常<1000）
+
+3.添加用户到指定组（主组 / 附加组） 
+
+usermod -aG wheel testuser
+
+- name: 配置用户所属组
+  hosts: all
+  tasks:
+    - name: 将testuser加入主组dev，附加组wheel、docker
+      ansible.builtin.user:
+        name: testuser
+        group: dev               # 主组（默认创建同名组）
+        groups: wheel,docker     # 附加组（多个用逗号分隔）
+        append: yes              # 追加组（默认no，会覆盖原有附加组！必加yes避免丢失）
+
+4.免密登录
+
+- name: 配置testuser的SSH免密登录
+  hosts: all
+  tasks:
+    - name: 推送公钥到testuser的authorized_keys
+      authorized_key:
+        user: testuser                          # 目标用户
+        state: present                          # 确保密钥存在
+        key: "{{ lookup('file', '/home/devops/.ssh/id_rsa.pub') }}"  # 本地公钥路径
+        path: /home/testuser/.ssh/authorized_keys  # 目标密钥文件（默认自动生成）
+        manage_dir: yes                         # 自动创建~/.ssh目录并设置权限（默认yes）
+    - name: Set permissions on the authorized_keys file
+      ansible.builtin.file:
+        path: /home/testuser/.ssh/authorized_keys  # 目标密钥文件（默认自动生成）
+        mode: '0600'
+
+
+5.批量管理多个用户（循环方式）
+

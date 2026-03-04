@@ -128,3 +128,25 @@ usermod -aG wheel testuser
         - { name: user1, uid: 10087 }
         - { name: user2, uid: 10088 }
         - { name: user3, uid: 10089 }
+
+
+
+# ansible-galaxy
+ansible-galaxy search'redis' --platforms EL #查找EL平台下的redis
+ansible-galaxy info geerlingguy.redis # 以下命令显示了Ansible Galaxy提供的geerlingguy.redis角色的相关信息。
+
+
+在ansible.cfg的[defaults]下追加
+[defaults]
+inventory = /home/devops/ansible/inventory
+roles_path = /home/devops/ansible/roles
+这样安装包下载后就在这个文件夹下
+
+在roles_path下编辑requirements.yml
+执行ansible-galaxy install -r ./roles/requirements.yml 进行角色安装
+
+requirements.yml格式
+- src: geerlingguy.redis
+  
+
+

@@ -134,12 +134,18 @@ usermod -aG wheel testuser
 # ansible-galaxy
 ansible-galaxy search'redis' --platforms EL #查找EL平台下的redis
 ansible-galaxy info geerlingguy.redis # 以下命令显示了Ansible Galaxy提供的geerlingguy.redis角色的相关信息。
+ansible-galaxy install -r ./roles/requirements.yml #安装角色
+ansible-galaxy list  #列出本地角色。
+ansible-galaxy remove nginx  #删除本地nginx角色。
+
+
 
 
 在ansible.cfg的[defaults]下追加
 [defaults]
 inventory = /home/devops/ansible/inventory
 roles_path = /home/devops/ansible/roles
+log_path = /home/student/troubleshoot-playbook/ansible. log # 配置日志文件路径
 这样安装包下载后就在这个文件夹下
 
 在roles_path下编辑requirements.yml
@@ -147,6 +153,60 @@ roles_path = /home/devops/ansible/roles
 
 requirements.yml格式
 - src: geerlingguy.redis
-  
+  version: "1.5.0" #指定版本
+  scm: git #如果角色托管在来源控制存储库中，则需要使用scm属性。如果角色托管在Ansible Galaxy中，或者以tar存档形式托管，则省略scm关键字。
+  name: myrole #关键字用于覆盖角色的本地名称
+
+## collections
+ansible-galaxy collection install -r collections/requirements.yml
 
 
+
+# 所有常用模块
+## dnf
+- name: install package
+  dnf:
+    name:    #'*'
+      - httpd  
+      - firewalld  
+    state: present #absent latest(dnf upgrade)
+    enabled: true
+#如果用loop，效率低，需要单独循环执行任务
+- name: install package
+  dnf:
+    name: "{{ item }}"  
+    state: present #absent latest(dnf upgrade)
+    enabled: true
+  loop:
+    - httpd  
+    - firewalld  
+
+
+
+dnf group list/install/info
+dnf module list/install/info
+
+
+## user
+
+- name: create user
+  user:
+    name: devops2
+    shell: /bin/bash
+    groups: wheel
+    append: true
+    state: absent
+    home: ""
+    create_home: true
+    state: present 创建 absent 删除
+    generate_ssh_key: true
+    ssh_key _bits: 2048 #密钥位数
+    ssh_key_file: .ssh/id_my_rsa
+
+## group
+groupadd groupdel groupmod
+
+- name: create group
+  group:
+    name: auditors
+    state: present

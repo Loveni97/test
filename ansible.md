@@ -409,3 +409,47 @@ volumes:
     mount_point: "/data"
     fs_type: xfs
     state: present
+
+## 配置交换空间
+- name: Configure a swap volume
+  hosts: all
+  roles:
+    - name: redhat.rhel_system_roles.storage
+      storage_pools:
+        - name: vgswap
+          type: lvm
+          disks: 
+            - /dev/vdb
+          volumes:
+            - name: lvswap
+              size: 512m
+              fs_type: swap
+              state: present
+
+ansible_facts['devices'] #块设备相关事实
+ansible_facts['device_links'] #设备链路相关事实
+ansible_facts['mounts'] #挂载文件系统
+
+# 管理网络配置
+---
+network_provider: nm
+network_connections:
+  - name: ens4
+    type: ethernet
+    ip:
+      address:
+        - 172.25.250.30/24
+
+
+network_connections:
+- name: eth0
+  persistent_state: present
+  type: ethernet
+  autoconnect: yes
+  mac: 00:00:5e:00:53:5d
+  ip:
+    address:
+      - 172.25.250.40/24
+    dns:
+      - 8.8.8.8
+  zone: external

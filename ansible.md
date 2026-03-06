@@ -282,3 +282,130 @@ groupadd groupdel groupmod
         state: restarted
 
 # 管理启动过程和调度的进程
+---
+- name: recurring cron job
+  hosts: centos8
+  become: true
+  tasks:
+    - name: crontab file exists
+      cron:
+        name: add date and time to a file
+        job: date >> /home/devops/my_date_time_cron_job
+        minute: "*/2"
+        hour: 9-16
+        weekday: 1-5
+        user: devops
+        cron_file: add-date-time
+        state: present
+
+
+---
+- name: remove cron job
+  hosts: centos8
+  become: true
+  tasks:
+    - name: removed
+      cron:
+        name: add date and time to a file
+        user: devops
+        cron_file: add-date-time
+        state: absent
+
+
+---
+- name: schedule at task
+  hosts: centos8
+  become: true
+  become_user: devops
+  tasks:
+    - name: create date and time file
+      ansible.posix.at:
+        command: date > ~/my_at_date_time
+        count: 1
+        units: minutes
+        unique: yes
+        state: present
+
+
+---
+- name: change default boot target
+  hosts: centos8
+  become: true
+  gather_facts: false
+  vars:
+    default_target: "graphical.target"
+  tasks:
+    - name: get current boot target
+      command:
+        cmd: systemctl get-default
+      changed_when: false
+      register: target
+    - name: set default boot target
+      command:
+        cmd: systemctl set-default {{ default_target }}
+      when: default_target not in target['stdout']
+
+
+---
+- name: change default boot target
+  hosts: centos8
+  become: true
+  tasks:
+    - name: hosts are rebooted
+      reboot:
+
+
+# 管理存储
+## 挂载现有文件系统
+以下示例任务会将172.25.250.100:/share处的可用NFS共享挂载到受管主机上的/nfsshare目录。
+- name: Mount NFS share
+  ansible.posix.mount:
+    path: /nfsshare
+    src: 172.25.250.100:/share
+    fstype: nfs
+    opts: defaults
+    dump: '0'
+    passno: '0'
+    state: mounted
+
+## 使用存储系统角色配置存储
+以下示例play在/dev/vdg设备上创建了XFS文件系统，并将其挂载到/opt/extra。
+- name: Example of a simple storage devicehosts: all
+  roles:
+    - name: redhat.rhel_system_roles.storage
+      storage_volumes:
+        name: extra
+        type: disk
+        disks:
+          - /dev/vdg
+        fs_type: xfs
+        mount_point: /opt/extra
+
+## 使用“存储"角色管理LVM
+- name: Configure storage on webservers
+  hosts: webservers
+  roles:
+    - name: redhat.rhel_system_roles.storage
+      storage_pools:
+        - name: vg01
+          type: lvm
+          disks: /dev/vdb
+          volumes:
+            - name: lvol01
+              size: 128m
+              mount_point: "/data"
+              fs_type: xfs
+              state: present
+            - name: lvol02
+              size: 256m
+              mount_point: "/backup"
+              fs_type: xfs
+              state: present
+
+在下例条目中，如果已创建大小为128MB的lvol01逻辑卷，则逻辑卷和文件系统将扩大至256MB，假设卷组内有可用空间。
+volumes:
+  - name: lvol01
+    size: 256m
+    mount_point: "/data"
+    fs_type: xfs
+    state: present

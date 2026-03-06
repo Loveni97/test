@@ -280,3 +280,5 @@ groupadd groupdel groupmod
       service:
         name: sshd
         state: restarted
+
+# 管理启动过程和调度的进程

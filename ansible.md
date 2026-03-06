@@ -210,3 +210,73 @@ groupadd groupdel groupmod
   group:
     name: auditors
     state: present
+
+## known_hosts
+
+## ansible.posix.authorized_key #添加密钥
+
+- name: Set authorized key
+  ansible.posix.authorized_key:
+    user: user1 #受管主机用户名
+    state: present
+    key: "{{ lookup('ansible.builtin.file','files/user1/id_rsa.pub') }}" #查找ansible文件夹下文件
+
+## ansible.builtin.lineinfile #添加sudo权限
+- name: Modify sudo to allow the groupe1 group sudo without a password
+  ansible.builtin.lineinfile:
+    path: /etc/sudoers.d/user2
+    state: present
+    create: true
+    mode: 0440
+    line: "%user2 ALL=(ALL) NOPASSWD: ALL"
+    validate: /usr/sbin/visudo -cf %s
+
+
+- name: disabled root login
+  ansible.builtin.lineinfile:
+    dest: /etc/ssh/sshd_config
+    regexp: "^PermitRootLogin"
+    line: "PermitRootLogin no"
+    notify: Restart sshd
+
+
+## 综合案例
+---
+- name: create users
+  hosts: centos8
+  vars_files:
+    - vars/users_vars.yml
+  tasks:
+    - name: create group
+      group:
+        name: webadmin
+        state: present
+    - name: create user
+      user:
+        name: "{{ item['username'] }}"
+        groups: "{{ item['groups'] }}"
+      loop: "{{ users }}"
+    - name: add keys
+      ansible.posix.authorized_key:
+        user: "{{ item['username'] }}"
+        key: "{{ lookup('file', 'files/'+ item['username'] + '.key.pub')}}"
+      loop: "{{ users }}"
+    - name: Modify sudo to allow the groupe1 group sudo without a password
+      ansible.builtin.lineinfile:
+        path: /etc/sudoers.d/webadmin
+        state: present
+        create: true
+        mode: 0440
+        line: "%webadmin ALL=(ALL) NOPASSWD: ALL"
+        validate: /usr/sbin/visudo -cf %s
+    - name: disabled root login
+      ansible.builtin.lineinfile:
+        dest: /etc/ssh/sshd_config
+        regexp: "^PermitRootLogin"
+        line: "PermitRootLogin no"
+      notify: Restart sshd
+  handlers:
+    - name: Restart sshd
+      service:
+        name: sshd
+        state: restarted

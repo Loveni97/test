@@ -145,7 +145,7 @@ ansible-galaxy remove nginx  #删除本地nginx角色。
 [defaults]
 inventory = /home/devops/ansible/inventory
 roles_path = /home/devops/ansible/roles
-log_path = /home/student/troubleshoot-playbook/ansible. log # 配置日志文件路径
+log_path = /home/student/troubleshoot-playbook/ansible.log # 配置日志文件路径
 这样安装包下载后就在这个文件夹下
 
 在roles_path下编辑requirements.yml

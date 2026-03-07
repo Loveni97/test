@@ -453,3 +453,50 @@ network_connections:
     dns:
       - 8.8.8.8
   zone: external
+
+
+# task引用
+
+playbook.yml #主文件
+tasks/
+├── install_and_enabled.yml
+└── web_task.yml
+
+install_and_enabled.yml
+
+---
+- name: install and enable
+  debug:
+    msg: "{{ package_name }}"
+
+web_task.yml
+
+---
+- name: web task
+  import_tasks: install_and_enabled.yml
+  vars:
+    package_name: 123
+
+
+playbook.yml
+---
+- name: play1
+  hosts: datacenter1
+  tasks:
+    - name: echo
+      debug:
+        msg: "{{ansible_facts['interfaces']}}"
+    - name: import tasks
+      import_tasks: tasks/web_task.yml
+
+
+# inventory文件夹
+host.yml
+
+[datacenter1]
+centos ansible_host=192.168.88.130 #指定ansible中主机地址，可以编辑多个名称，但ip一样，也可以直接使用主机host中名称
+
+[datacenter]
+redhat-01
+centos8
+

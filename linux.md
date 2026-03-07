@@ -215,6 +215,7 @@ done
 
 yum whatprovides ansible 找到包名
 yum install ansible-1:7.7.0-1.el9.noarch
+pip3 install ansible-navigator 
 
 1.免密
 

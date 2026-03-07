@@ -1,5 +1,5 @@
 ---
-- hosts: all  # 目标主机：所有节点（redhat-01+centos8），可替换为你的主机组如[web]
+- hosts: centos  # 目标主机：所有节点（redhat-01+centos8），可替换为你的主机组如[web]
   gather_facts: yes  # 收集远程节点系统信息（可选，建议开启，模板/变量可能用到）
   roles:
     - test  # 引用Role：名字和/etc/ansible/roles/下的目录名一致（nginx）

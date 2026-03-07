@@ -1,0 +1,5 @@
+---
+- name: web task
+  import_tasks: install_and_enabled.yml
+  vars:
+    package_name: 123

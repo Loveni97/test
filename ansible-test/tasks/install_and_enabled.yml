@@ -1,0 +1,4 @@
+---
+- name: install and enable
+  debug:
+    msg: "{{ package_name }}"

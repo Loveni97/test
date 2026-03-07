@@ -1,0 +1,12 @@
+server_name: {{ inventory_hostname }}  # 节点事实变量（主机名）
+server_ip: {{ ansible_default_ipv4.address | default('127.0.0.1') }}  # 变量+过滤器（默认值）
+app_port: {{ app_port }}  # 自定义变量
+
+{% if app_port == 8080 %}  # 条件判断
+run_user: nginx
+{% else %}
+run_user: root
+{% endif %}
+{% for port in [80, 443, 8080] %}  # 循环
+listen_port_{{ loop.index }}: {{ port }}
+{% endfor %}

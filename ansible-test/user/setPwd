@@ -1,0 +1,8 @@
+- name: 为testuser设置加密密码
+  hosts: all
+  tasks:
+    - name: 修改用户密码
+      ansible.builtin.user:
+        name: testuser
+        password: "$6$6LIrX7stENb5YlE.$Vd/UtOxC4fBW4NhGvJmTmVz6/eMdyBre3t9Il3qbwRX4TsmmueTbHlT8.KHR0l2uYgw4pmPeBjdab9Y906ojC." 
+        update_password: always  # 每次执行都更新密码（默认on_create，仅创建时设置）

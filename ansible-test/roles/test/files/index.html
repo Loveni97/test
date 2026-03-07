@@ -1,0 +1,35 @@
+<DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <title>Ansible统一部署Nginx</title>
+    <style>
+        body {
+            text-align: center;
+            margin-top: 100px;
+            font-family: Arial, sans-serif;
+        }
+        h1 {
+            color: #2c3e50;
+            font-size: 36px;
+        }
+        p {
+            color: #7f8c8d;
+            font-size: 18px;
+        }
+    </style>
+</head>
+<body>
+    <h1>Welcome to Ansible Nginx Server</h1>
+    <p>节点主机名：<span id="hostname"></span></p>
+    <p>部署时间：2026年</p>
+    <script>
+        // 动态显示当前节点的主机名（可选，增加个性化）
+        fetch('/hostname')
+        .then(res => res.text())
+        .then(data => document.getElementById('hostname').innerText = data)
+        .catch(err => document.getElementById('hostname').innerText = window.location.hostname);
+    </script>
+</body>
+</html>
+

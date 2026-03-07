@@ -1,0 +1,9 @@
+---
+- name: delete /etc/test.conf 
+  hosts: all
+  tasks:
+    - name: delete
+      file:
+        path: /tmp/test.conf  # 远程节点文件路径（不存在则创建，存在则覆盖）
+        owner: devops
+        group: root

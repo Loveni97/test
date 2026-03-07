@@ -1,0 +1,6 @@
+[datacenter1]
+centos ansible_host=192.168.88.130
+
+[datacenter]
+redhat-01
+centos8

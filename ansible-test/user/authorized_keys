@@ -1,0 +1,14 @@
+- name: 配置testuser的SSH免密登录
+  hosts: all
+  tasks:
+    - name: 推送公钥到testuser的authorized_keys
+      authorized_key:
+        user: testuser                          # 目标用户
+        state: present                          # 确保密钥存在
+        key: "{{ lookup('file', '/home/devops/.ssh/id_rsa.pub') }}"  # 本地公钥路径
+        path: /home/testuser/.ssh/authorized_keys  # 目标密钥文件（默认自动生成）
+        manage_dir: yes                         # 自动创建~/.ssh目录并设置权限（默认yes）
+    - name: Set permissions on the authorized_keys file
+      ansible.builtin.file:
+        path: /home/testuser/.ssh/authorized_keys  # 目标密钥文件（默认自动生成）
+        mode: '0600'

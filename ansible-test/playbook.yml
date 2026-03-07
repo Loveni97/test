@@ -1,0 +1,15 @@
+---
+- name: play1
+  hosts: datacenter1
+  tasks:
+    - name: echo
+      debug:
+        msg: "{{ansible_facts['interfaces']}}"
+    - name: import tasks
+      import_tasks: tasks/web_task.yml
+    - name: echo group var
+      debug:
+        msg: "{{ datacenter1_group_var }}------{{ datacenter1_group_service }}"
+    - name: echo host var
+      debug:
+        msg: "{{ centos_host_var }}"

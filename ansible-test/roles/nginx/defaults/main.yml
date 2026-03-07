@@ -1,0 +1,4 @@
+nginx_listen_port: 80
+# Nginx工作目录
+nginx_root: /usr/share/nginx/html
+nginx_user: nginx

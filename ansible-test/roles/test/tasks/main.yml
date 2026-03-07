@@ -1,0 +1,17 @@
+- name: # 查看Nginx运行状态
+  systemd:
+    name: nginx
+  register: output
+- name: echo
+  debug:
+    msg: "Service {{ output.name }} is {{ output.status.ActiveState }} --- {{ inventory_hostname }} "
+- name: 动态创建
+  template:
+    src: test.conf.j2 
+    dest: /tmp/test.conf
+    mode: 0644
+    owner: devops
+    group: devops
+  vars:
+    app_port: 9090
+

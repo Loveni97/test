@@ -1,0 +1,16 @@
+---
+- name: test
+  hosts: all
+  gather_facts: no
+  tasks:
+    - name: running
+      service:
+        name: "{{item}}"
+        state: started
+      register: echo_result
+      loop:
+        - firewalld
+        - httpd
+    - name: show
+      debug:
+        var: echo_result

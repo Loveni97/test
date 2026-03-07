@@ -1,0 +1,12 @@
+---
+- name: remove cron job
+  hosts: centos8
+  become: true
+  tasks:
+    - name: removed
+      cron:
+        name: add date and time to a file
+        user: devops
+        cron_file: add-date-time
+        state: absent
+

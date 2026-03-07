@@ -1,0 +1,17 @@
+---
+- name: change default boot target
+  hosts: centos8
+  become: true
+  gather_facts: false
+  vars:
+    default_target: "graphical.target"
+  tasks:
+    - name: get current boot target
+      command:
+        cmd: systemctl get-default
+      changed_when: false
+      register: target 
+    - name: set default boot target
+      command:
+        cmd: systemctl set-default {{ default_target }}
+      when: default_target not in target['stdout']

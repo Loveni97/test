@@ -1,0 +1,7 @@
+---
+- name: change default boot target
+  hosts: centos8
+  become: true
+  tasks:
+    - name: hosts are rebooted
+      reboot:

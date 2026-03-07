@@ -1,0 +1,39 @@
+---
+- name: create users
+  hosts: centos8
+  vars_files: 
+    - vars/users_vars.yml
+  tasks:
+    - name: create group
+      group: 
+        name: webadmin
+        state: present
+    - name: create user
+      user:
+        name: "{{ item['username'] }}"
+        groups: "{{ item['groups']}}"
+      loop: "{{ users }}"
+    - name: add keys
+      ansible.posix.authorized_key:
+        user: "{{ item['username'] }}"
+        key: "{{ lookup('file', 'files/'+ item['username'] + '.key.pub')}}"
+      loop: "{{ users }}"
+    - name: Modify sudo to allow the groupe1 group sudo without a password
+      ansible.builtin.lineinfile:
+        path: /etc/sudoers.d/webadmin
+        state: present
+        create: true
+        mode: 0440
+        line: "%webadmin ALL=(ALL) NOPASSWD: ALL"
+        validate: /usr/sbin/visudo -cf %s        
+    - name: disabled root login
+      ansible.builtin.lineinfile:
+        dest: /etc/ssh/sshd_config
+        regexp: "^PermitRootLogin"
+        line: "PermitRootLogin no"
+      notify: Restart sshd
+  handlers:
+    - name: Restart sshd
+      service:
+        name: sshd
+        state: restarted

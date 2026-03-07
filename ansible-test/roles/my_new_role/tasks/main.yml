@@ -1,0 +1,21 @@
+---
+# tasks file for my_new_role
+- name: install httpd
+  dnf:
+    name: httpd
+    state: latest
+- name: ensure started 
+  service:
+    name: httpd
+    state: started
+    enabled: true
+- name: vhost file is installed
+  template:
+    src:
+    dest:
+    owner: root
+    group: root
+    mode: 0644
+  notify:
+    - restart httpd
+

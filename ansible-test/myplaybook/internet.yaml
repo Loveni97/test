@@ -1,0 +1,41 @@
+---
+- name: internet
+  hosts: test
+  tasks:
+    - name: install
+      ansible.builtin.dnf:
+        name:
+          - httpd
+          - firewalld
+          - php
+          - mariadb-server
+          - php-mysqlnd
+        state: latest
+    - name: firewalld enabled
+      service:
+        name: firewalld
+        enabled: true
+        state: started
+    - name: firewalld permits
+      firewalld:
+        service: http
+        permanent: true
+        state: enabled
+        immediate: yes
+    - name: httpd enabled
+      service:
+        name: httpd
+        enabled: true
+        state: started
+    - name: mariadb enabled
+      service:
+        name: mariadb
+        enabled: true
+        state: started
+    - name: test php
+      copy:
+        src: index.php
+        dest: /var/www/html/index.php
+        mode: 0644
+
+

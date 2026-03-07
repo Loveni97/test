@@ -1,0 +1,15 @@
+---
+- name: test
+  hosts: all # 主机组名
+  gather_facts: yes
+  tasks:
+    - name: test
+      uri:
+        url: http://www.baidu.com
+        return_content: no
+        status_code: 200
+      register: output
+    - name: debug
+      debug:
+        var: output
+

@@ -1,0 +1,16 @@
+---
+- name: recurring cron job
+  hosts: centos8
+  become: true
+  tasks:
+    - name: crontab file exists
+      cron:
+        name: add date and time to a file
+        job: date >> /home/devops/my_date_time_cron_job
+        minute: "*/2"
+        hour: 9-16
+        weekday: 1-5
+        user: devops
+        cron_file: add-date-time
+        state: present
+

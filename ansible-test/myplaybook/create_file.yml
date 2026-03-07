@@ -1,0 +1,13 @@
+---
+- name: 创建 /etc/test.conf 并写入静态内容
+  hosts: all
+  tasks:
+    - name: create
+      copy:
+        content: |
+          port=80
+          host=0.0.0.0
+          log_path=/var/log/test.log
+        dest: /tmp/test.conf  # 远程节点文件路径（不存在则创建，存在则覆盖）
+        mode: 0644
+        owner: root

@@ -1,0 +1,9 @@
+---
+- name: write content
+  hosts: test
+  tasks:
+    - name: write
+      copy:
+        content: 123
+        dest: /home/devops/ansible/myplaybook/test.txt
+

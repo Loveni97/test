@@ -1,0 +1,4 @@
+ansible-navigator:
+  # 核心：关闭容器化执行环境
+  execution-environment:
+    enabled: false

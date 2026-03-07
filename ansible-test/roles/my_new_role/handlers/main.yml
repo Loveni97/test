@@ -1,0 +1,6 @@
+---
+# handlers file for my_new_role
+- name: restart httpd
+  service:
+    name: httpd
+    state: restarted

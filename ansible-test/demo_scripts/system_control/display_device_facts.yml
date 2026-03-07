@@ -1,0 +1,27 @@
+---
+- name: display device facts
+  hosts: centos8
+  tasks:
+    - name:
+      debug:
+        var: ansible_facts['devices']
+    - name:
+      debug:
+        msg: The root file system on {{ ansible_facts['fqdn'] }} 
+    - name: print free space on / free system
+      debug:
+        msg: >
+          The root file system on {{ ansible_facts['fqdn'] }} 
+          has {{ item['block_available'] * item['block_size'] / 1000000 }}
+          megabytes free.
+      loop: "{{ ansible_facts['mounts'] }}"
+      when: item['mount'] == '/'
+    - name: display net interfaces
+      debug:
+        msg: >
+          the host has {{ ansible_facts['interfaces'] }}
+    - name: display eth0 info
+      debug:
+        msg: the {{item}} is {{ ansible_facts[item]}}
+      loop: "{{ ansible_facts['interfaces'] }}"
+      when: item == 'ens160'

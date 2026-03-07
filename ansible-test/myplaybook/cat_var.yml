@@ -1,0 +1,7 @@
+---
+- name: cat var
+  hosts: datacenter1
+  tasks:
+    - name: echo
+      debug:
+        var: "{{package}}"

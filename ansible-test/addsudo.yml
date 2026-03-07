@@ -1,0 +1,12 @@
+---
+- name: add sudoer
+  hosts: centos8
+  tasks:
+    - name: Modify sudo to allow the groupe1 group sudo without a password
+      ansible.builtin.lineinfile:
+        path: /etc/sudoers.d/user2
+        state: present
+        create: true
+        mode: 0440
+        line: "%user2 ALL=(ALL) NOPASSWD: ALL"
+        validate: /usr/sbin/visudo -cf %s

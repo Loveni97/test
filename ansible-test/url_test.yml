@@ -1,7 +1,7 @@
 ---
 - name: test
-  hosts: all # 主机组名
-  gather_facts: yes
+  hosts: centos # 主机组名
+  gather_facts: no
   tasks:
     - name: test
       uri:

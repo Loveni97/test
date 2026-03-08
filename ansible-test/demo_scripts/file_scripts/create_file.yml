@@ -14,39 +14,45 @@
         owner: root
         group: root
 
-    - name: delete file
-      file:
-        path: /tmp/test.conf  # 远程节点文件路径（不存在则创建，存在则覆盖）
-        state: absent
-      register: delete_result
-
     - name: touch directory
       file:
         path: /tmp/mydir1
         state: directory
         owner: devops
 
-    # - name: touch directory
-    #   file:
-    #     path: /tmp/mydir2
-    #     state: directory
-    #     owner: devops
-    
     - name: create soft link #目的链接不能存在
       file:
         src: /tmp/mydir1
-        dest: /tmp/mydir3
+        dest: /tmp/soft_link
         state: link
 
+    - name: delete soft link #目的链接不能存在
+      file:
+        path: /tmp/soft_link
+        state: absent
 
-    # - name: delete /tmp/mydir2
-    #   include_tasks: tasks/delete_file.yml #动态加载，才能取loop中值
-    #   vars:
-    #     file_path: "{{item}}"
-    #   loop:
-    #     - /tmp/mydir1
-    #     - /tmp/mydir2
+    - name: create hard link #文件夹不能创建硬链接
+      file:
+        src: /tmp/test.conf
+        dest: /tmp/hard_link
+        state: hard
+
+    - name: modify file owner
+      file:
+        path: /tmp/test.conf  
+        owner: devops
+        group: devops
+
+    - name: delete loop
+      include_tasks: tasks/delete_file.yml #动态加载，才能取loop中值
+      vars:
+        file_path: "{{item}}"
+      loop:
+        - /tmp/mydir1
+        - /tmp/hard_link
+        - /tmp/test.conf
+      register: delete_result
     
     - name: echo result
       debug:
-        msg: "{{delete_result}}"
+        msg: "{{delete_result.msg}}---{{ centos_host_ip }}"

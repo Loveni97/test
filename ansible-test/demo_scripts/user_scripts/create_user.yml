@@ -1,6 +1,6 @@
 ---
 - name: create user
-  hosts: redhat-01
+  hosts: centos
   gather_facts: no
   vars_files: 
     - ../../vars/users_vars.yml

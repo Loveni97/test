@@ -1,7 +1,6 @@
 ---
 - name: demo
-  hosts: centos8
-  gather_facts: no
+  hosts: centos
   tasks:
     - name: register
       shell: free -h
@@ -28,9 +27,9 @@
         - username: name2
           passwd: 321
 
-    # - name: echo
-    #   debug:
-    #     msg: 
-    #     >  
-    #       "Free memory 
-    #       for this system is {{ ansible_facts['memfree_mb'] }} mb" 
+    - name: echo
+      debug:
+        msg: 
+        >  
+          "Free memory 
+          for this system is {{ ansible_facts['memfree_mb'] }} mb-----{{centos_host_var}}" 

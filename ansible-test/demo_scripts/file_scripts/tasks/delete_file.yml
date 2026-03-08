@@ -1,0 +1,9 @@
+---
+- name: print file path
+  debug:
+    msg: "to be deleted file path：{{ file_path }}"
+
+- name: delete {{file_path}}
+  file:
+    path: "{{file_path}}"
+    state: absent

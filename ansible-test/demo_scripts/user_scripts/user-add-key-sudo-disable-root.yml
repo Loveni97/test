@@ -2,7 +2,7 @@
 - name: create users
   hosts: centos8
   vars_files: 
-    - vars/users_vars.yml
+    - ../../vars/users_vars.yml
   tasks:
     - name: create group
       group: 
@@ -16,7 +16,7 @@
     - name: add keys
       ansible.posix.authorized_key:
         user: "{{ item['username'] }}"
-        key: "{{ lookup('file', 'files/'+ item['username'] + '.key.pub')}}"
+        key: "{{ lookup('file', '../../files/'+ item['username'] + '.key.pub')}}"
       loop: "{{ users }}"
     - name: Modify sudo to allow the groupe1 group sudo without a password
       ansible.builtin.lineinfile:

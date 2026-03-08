@@ -1,8 +1,9 @@
 ---
 - name: 创建 /etc/test.conf 并写入静态内容
-  hosts: all
+  hosts: centos
+  gather_facts: no
   tasks:
-    - name: create
+    - name: create file
       copy:
         content: |
           port=80
@@ -11,3 +12,41 @@
         dest: /tmp/test.conf  # 远程节点文件路径（不存在则创建，存在则覆盖）
         mode: 0644
         owner: root
+        group: root
+
+    - name: delete file
+      file:
+        path: /tmp/test.conf  # 远程节点文件路径（不存在则创建，存在则覆盖）
+        state: absent
+      register: delete_result
+
+    - name: touch directory
+      file:
+        path: /tmp/mydir1
+        state: directory
+        owner: devops
+
+    # - name: touch directory
+    #   file:
+    #     path: /tmp/mydir2
+    #     state: directory
+    #     owner: devops
+    
+    - name: create soft link #目的链接不能存在
+      file:
+        src: /tmp/mydir1
+        dest: /tmp/mydir3
+        state: link
+
+
+    # - name: delete /tmp/mydir2
+    #   include_tasks: tasks/delete_file.yml #动态加载，才能取loop中值
+    #   vars:
+    #     file_path: "{{item}}"
+    #   loop:
+    #     - /tmp/mydir1
+    #     - /tmp/mydir2
+    
+    - name: echo result
+      debug:
+        msg: "{{delete_result}}"

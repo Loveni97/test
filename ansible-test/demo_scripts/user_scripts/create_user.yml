@@ -1,0 +1,44 @@
+---
+- name: create user
+  hosts: redhat-01
+  gather_facts: no
+  vars_files: 
+    - ../../vars/users_vars.yml
+  vars:
+    create_user: devops2
+  tasks:
+    - name: create user {{create_user}}
+      user:
+        name: "{{create_user}}"
+        shell: /bin/bash
+        groups: wheel
+        append: true
+        state: present
+    - name: loop user
+      debug:
+        msg: "{{ item.username }} -- {{ item['groups'] }}"
+      loop: "{{ users }}"
+      
+    - name: delete user {{create_user}}
+      user:
+        name: "{{create_user}}"
+        state: absent
+      register: result
+
+    - name: echo user {{create_user}} exist
+      shell: id -u {{create_user}}
+      ignore_errors: true
+      register: result
+      changed_when: false
+
+    - name: echo result
+      debug:
+        msg: "{{ result.rc }}"
+
+    - name: Delete user's home directory if user exists
+      file:
+        path: "/home/{{ create_user }}"
+        state: absent
+      when: result.rc==0
+        
+

@@ -6,11 +6,11 @@
     - name: running
       service:
         name: "{{item}}"
-        state: started
+        state: stopped
       register: echo_result
       loop:
         - firewalld
         - httpd
     - name: show
       debug:
-        var: echo_result
+        var: echo_result.msg

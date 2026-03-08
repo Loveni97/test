@@ -1,7 +1,7 @@
 ---
-- name: testansible_facts
-  hosts: all
+- name: test ansible_facts
+  hosts: centos
   tasks:
     - name: debug
       debug:
-        var: ansible_facts
+        var: ansible_facts['interfaces']

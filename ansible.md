@@ -430,6 +430,24 @@ ansible_facts['devices'] #块设备相关事实
 ansible_facts['device_links'] #设备链路相关事实
 ansible_facts['mounts'] #挂载文件系统
 
+
+# 常用魔法变量
+hostvars
+groups
+group_names
+inventory_hostname
+
+
+# vault 加密
+ansible-vault create filename
+ansible-vault edit filename
+ansible-vault view  filename
+ansible-vault encrypt filename
+ansible-vault decrypt filename
+ansible-vault rekey filename
+
+ansible-playbook demo_scripts/vault_scripts/read_vault.yml --vault-id @prompt
+ansible-playbook playbook-import-task.yml --vault-password-file=demo_scripts/vault_scripts/vault-pass
 # 管理网络配置
 ---
 network_provider: nm

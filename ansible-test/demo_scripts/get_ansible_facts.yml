@@ -5,3 +5,4 @@
     - name: debug
       debug:
         var: ansible_facts['interfaces']
+

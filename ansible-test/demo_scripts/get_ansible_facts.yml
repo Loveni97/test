@@ -2,7 +2,28 @@
 - name: test ansible_facts
   hosts: centos
   tasks:
-    - name: debug
+    - name: echo interfaces
       debug:
         var: ansible_facts['interfaces']
+    - name: echo hostname
+      debug:
+        var: ansible_facts['hostname']
+    - name: echo fqdn
+      debug:
+        var: ansible_facts['fqdn']
+    - name: echo kernel
+      debug:
+        var: ansible_kernel
+    - name: echo hostvars
+      debug:
+        var: hostvars
+    - name: echo groups
+      debug:
+        var: groups
+    - name: echo group_names
+      debug:
+        var: group_names
+    - name: echo inventory_hostname
+      debug:
+        var: inventory_hostname
 

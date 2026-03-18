@@ -115,3 +115,43 @@ zabbix
 
 #拷贝字体给zabbix用，覆盖图形字体
 [root@zabbix4-server ~]#cp /usr/share/fonts/wqy-microhei/wqy-microhei.ttc /usr/share/zabbix/assets/fonts/graphfont.ttf
+
+几个核心概念
+
+
+1.主机，linux,win或者网络设备
+2.模板，一类监控对象的抽象，比如win模板
+3.监控项，定义具体某一项的监控指标，系统自带的，自定义
+4.触发器，基于监控项存在的， 
+5.动作，基于触发器存在的
+
+监控自己
+
+
+ntpdate -u ntp1.aliyun.com
+
+这是系统8
+rpm -ivh https://mirrors.tuna.tsinghua.edu.cn/zabbix/zabbix/4.0/rhel/8/x86_64/zabbix-agent-4.0.11-1.el8.x86_64.rpm
+
+这是系统9
+rpm -ivh https://mirrors.tuna.tsinghua.edu.cn/zabbix/zabbix/4.0/rhel/9/x86_64/zabbix-agent-4.0.46-2.el9.x86_64.rpm
+
+rpm -qa zabbix-agent
+
+
+vim /etc/zabbix/zabbix_agentd.conf 修改配置
+dG全部删除，不能有中文，修改serverip
+
+
+PidFile=/var/run/zabbix/zabbix_agentd.pid
+LogFile=/var/log/zabbix/zabbix_agentd.log
+LogFileSize=0
+Server=192.168.88.130
+Include=/etc/zabbix/zabbix_agentd.d/*.conf
+
+systemctl start zabbix-agent && systemctl enable zabbix-agent
+
+在接口中写明ip地址
+![alt text](image.png)
+
+systemctl restart zabbix.agent

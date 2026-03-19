@@ -142,12 +142,14 @@ rpm -qa zabbix-agent
 vim /etc/zabbix/zabbix_agentd.conf 修改配置
 dG全部删除，不能有中文，修改serverip
 
-
+cat > /etc/zabbix/zabbix_agentd.conf << 'EOF'
 PidFile=/var/run/zabbix/zabbix_agentd.pid
 LogFile=/var/log/zabbix/zabbix_agentd.log
 LogFileSize=0
 Server=192.168.88.130
 Include=/etc/zabbix/zabbix_agentd.d/*.conf
+EOF
+
 
 systemctl start zabbix-agent && systemctl enable zabbix-agent
 
@@ -155,3 +157,41 @@ systemctl start zabbix-agent && systemctl enable zabbix-agent
 ![alt text](image.png)
 
 systemctl restart zabbix.agent
+
+netstat -tnlup | grep zabbix_agent
+
+
+3.5安装zabbix-get命令，检测是否通信了
+
+yum install -y zabbix-get
+
+
+1.看日志
+cat 
+2. zabbix_get -s 192.168.88.134 -k agent.ping
+
+
+自定义模板
+
+
+
+自定义监控项
+
+
+
+完全流程
+1.写命令、脚本
+2.编写zabbix的自定义监控项的配置文件
+3.重启zabbix-agent
+4.试试zabbix-get能拿到数据吗
+5.去zabbix-ui 添加监控项
+
+
+案例：tcp的11个连接状态
+
+
+cat >/etc/zabbix/zabbix_agentd.d/tcp_status.conf <<'EOF'
+UserParameter=LISTEN,netstat -ant grep -c LISTEN
+UserParameter=TIME_WAIT,netstat -ant grep -c TIME_WAIT
+UserParameter=ESTABLISHED,netstat -ant grep -c ESTABLISHED
+EOF

@@ -156,7 +156,7 @@ systemctl start zabbix-agent && systemctl enable zabbix-agent
 在接口中写明ip地址
 ![alt text](image.png)
 
-systemctl restart zabbix.agent
+systemctl restart zabbix-agent
 
 netstat -tnlup | grep zabbix_agent
 

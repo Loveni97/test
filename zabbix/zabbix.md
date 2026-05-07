@@ -32,6 +32,19 @@ mysql -uroot -plinux0224 -e "grant all privileges on zabbix.* to zabbix@localhos
 zcat /usr/share/doc/zabbix-server-mysql/create.sql.gz | mysql -uroot -plinux0224 zabbix
 
 zcat /usr/share/doc/zabbix-server-mysql-4.0.50/create.sql.gz | mysql -uroot -plinux0224 zabbix
+这边文件太大会报错
+
+vi /etc/my.cnf 配置下添加
+[mysqld]
+innodb_default_row_format = DYNAMIC
+innodb_log_file_size = 512M
+innodb_strict_mode = 0
+character-set-server = utf8mb4
+collation-server = utf8mb4_bin
+
+systemctl restart mariadb
+
+
 
 mysql -uroot -plinux0224 -e 'show tables from zabbix;'
 
@@ -87,8 +100,33 @@ vim /etc/httpd/conf.d/zabbix.conf
 
 
 vim /etc/php-fpm.d/zabbix.conf
+
+
+[zabbix]
+user = apache
+group = apache
+
+listen = /run/php-fpm/zabbix.sock
+listen.acl_users = apache
+listen.allowed_clients = 127.0.0.1
+
+pm = dynamic
+pm.max_children = 50
+pm.start_servers = 5
+pm.min_spare_servers = 5
+pm.max_spare_servers = 35
+
+php_value[session.save_handler] = files
+php_value[session.save_path]    = /var/lib/php/session
+
+修改时区
+
+php_value date.timezone Asia/Shanghai
+
+
 systemctl start httpd
 systemctl restart php-fpm
+
 
 <IfModule mod_php5.c>
     php_value max_execution_time 300
@@ -100,6 +138,8 @@ systemctl restart php-fpm
     php_value always_populate_raw_post_data -1
     php_value date.timezone Asia/Shanghai
 </IfModule>
+
+
 
 
 

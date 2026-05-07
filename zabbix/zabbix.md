@@ -176,8 +176,9 @@ dnf install -y glibc-langpack-zh
 
 监控自己
 
-
-ntpdate -u ntp1.aliyun.com
+时间同步
+1.chrony
+2.ntpdate -u ntp1.aliyun.com
 
 这是系统8
 rpm -ivh https://mirrors.tuna.tsinghua.edu.cn/zabbix/zabbix/4.0/rhel/8/x86_64/zabbix-agent-4.0.11-1.el8.x86_64.rpm

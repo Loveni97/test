@@ -150,8 +150,14 @@ systemctl restart php-fpm
 Admin
 zabbix
 
+修改无法切换中文
+对于centos 8系统安装这个就行
+dnf install -y glibc-langpack-zh
+
+
 
 修改页面乱码情况
+
 
 #文泉仪微黑字体
 [root@zabbix4-server ~]#yum install wqy-microhei-fonts -y
@@ -179,7 +185,7 @@ rpm -ivh https://mirrors.tuna.tsinghua.edu.cn/zabbix/zabbix/4.0/rhel/8/x86_64/za
 这是系统9
 rpm -ivh https://mirrors.tuna.tsinghua.edu.cn/zabbix/zabbix/4.0/rhel/9/x86_64/zabbix-agent-4.0.46-2.el9.x86_64.rpm
 
-rpm -qa zabbix-agent
+ 
 
 
 vim /etc/zabbix/zabbix_agentd.conf 修改配置

@@ -1,7 +1,10 @@
 安装zabbix的repo
 wget -O /etc/yum.repos.d/CentOS-Base.repo http://mirrors.aliyun.com/repo/Centos-7.repo
+zabbix仓库：
+这是centos7系统
 rpm -ivh https://mirrors.tuna.tsinghua.edu.cn/zabbix/zabbix/4.0/rhel/7/x86_64/zabbix-release-4.0-1.el7.noarch.rpm
 
+这是centos8系统
 rpm -ivh https://mirrors.tuna.tsinghua.edu.cn/zabbix/zabbix/4.0/rhel/8/x86_64/zabbix-release-4.0-2.el8.noarch.rpm
 
 替换镜像
@@ -37,7 +40,7 @@ mysql -uroot -plinux0224 -e 'show tables from zabbix;'
 grep "^[a-Z]" /etc/zabbix/zabbix_server.conf
 
 LogFile=/var/log/zabbix/zabbix_server.log
-LogFileSize=e
+LogFileSize=0
 PidFile=/var/run/zabbix/zabbix_server.pid
 SocketDir=/var/run/zabbix
 DBHost=localhost

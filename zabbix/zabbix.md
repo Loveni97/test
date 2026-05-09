@@ -241,7 +241,7 @@ cat
 
 
 cat >/etc/zabbix/zabbix_agentd.d/tcp_status.conf <<'EOF'
-UserParameter=LISTEN,netstat -ant grep -c LISTEN
-UserParameter=TIME_WAIT,netstat -ant grep -c TIME_WAIT
-UserParameter=ESTABLISHED,netstat -ant grep -c ESTABLISHED
+UserParameter=LISTEN,netstat -ant | grep -c LISTEN
+UserParameter=TIME_WAIT,netstat -ant | grep -c TIME_WAIT
+UserParameter=ESTABLISHED,netstat -ant | grep -c ESTABLISHED
 EOF

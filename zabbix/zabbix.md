@@ -238,6 +238,20 @@ cat
 
 
 案例：tcp的11个连接状态
+1.客户端独有状态
+‌SYN_SENT‌：客户端发送 SYN 报文后等待服务器确认。
+‌FIN_WAIT1‌：主动关闭连接时，发送 FIN 后等待对方确认。
+‌FIN_WAIT2‌：收到对方对 FIN 的 ACK 后，等待对方发送 FIN。
+‌CLOSING‌：双方同时关闭连接时，发送 FIN 后未收到 ACK 却收到对方 FIN。
+‌TIME_WAIT‌：主动关闭方在发送最后一个 ACK 后等待 2MSL，确保连接可靠关闭。
+2.服务器独有状态
+‌LISTEN‌：服务器等待客户端连接请求。
+‌SYN_RCVD‌：收到客户端 SYN 后，发送 SYN+ACK，等待最终 ACK。
+‌CLOSE_WAIT‌：收到对方 FIN 后，等待本地应用关闭连接。
+‌LAST_ACK‌：被动关闭方发送 FIN 后，等待对方 ACK。
+3.共有状态
+‌CLOSED‌：初始或连接完全关闭后的状态。
+‌ESTABLISHED‌：连接已建立，可进行双向数据传输。
 
 
 cat >/etc/zabbix/zabbix_agentd.d/tcp_status.conf <<'EOF'
@@ -245,3 +259,9 @@ UserParameter=LISTEN,netstat -ant | grep -c LISTEN
 UserParameter=TIME_WAIT,netstat -ant | grep -c TIME_WAIT
 UserParameter=ESTABLISHED,netstat -ant | grep -c ESTABLISHED
 EOF
+
+自定义传参方法
+
+UserParameter=tcp_status[*],netstat -ant | grep -c $1
+
+调用方法：zabbix_get -s ip -k tcp_status[LISTEN]

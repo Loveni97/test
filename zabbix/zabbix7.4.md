@@ -1,5 +1,8 @@
 这是centos8系统
+
+agent安装：
 rpm -ivh https://mirrors.tuna.tsinghua.edu.cn/zabbix/zabbix/7.4/stable/centos/8/x86_64/zabbix-agent-7.4.3-release1.el8.x86_64.rpm
+
 
 rpm -Uvh https://repo.zabbix.com/zabbix/7.4/release/centos/8/noarch/zabbix-release-latest-7.4.el8.noarch.rpm
 
@@ -49,3 +52,75 @@ echo "AllowUnsupportedDBVersions=1" >> /etc/zabbix/zabbix_server.conf
 
 
 
+
+# 这是6.4版本
+
+
+二、安装zabbix服务器前端和agent
+1安装zabbix存储库
+rpm -Uvh https://repo.zabbix.com/zabbix/6.4/rhel/8/x86_64/zabbix-release-6.4-1.el8.noarch.rpm
+dnf clean all
+
+rpm -Uvh https://repo.zabbix.com/zabbix/6.0/rhel/8/x86_64/zabbix-release-6.0-4.el8.noarch.rpm
+dnf clean all
+2.切换PHP的DNF模块版本
+dnf module switch-to php:7.4
+
+3.安装Zabbix server,web前端，agent
+
+dnf install zabbix-server-mysql zabbix-web-mysql zabbix-nginx-conf zabbix-sql-scripts zabbix-selinux-policy zabbix-agent
+
+三、安装和配置数据库
+
+cat > /etc/yum.repos.d/mariadb.repo <<'EOF'
+[mariadb]
+name = MariaDB
+baseurl = https://yum.mariadb.org/10.6/rhel/8/x86_64
+gpgkey = https://yum.mariadb.org/RPM-GPG-KEY-MariaDB
+gpgcheck = 1
+enabled = 1
+module_hotfixes = 1
+EOF
+
+
+dnf -y install mariadb-server && systemctl start mariadb && systemctl enable mariadb
+#安装完成后启动并且设置为开机启动
+
+
+3.设置mariadb数据库，创建zabbix库，存储监控数据，且创建账号
+mysqladmin password linux0224
+mysql -uroot -plinux0224 -e 'create database zabbix character set utf8 collate utf8_bin;'
+mysql -uroot -plinux0224 -e 'show databases;'
+
+创建用户账户，zabbix 密码是linux0224
+给与权限是，zabbix这个用户，对于zabbix这个库下的所有表，都是最大权限
+mysql -uroot -plinux0224 -e "grant all privileges on zabbix.* to zabbix@localhost identified by 'linux0224';"
+
+4.导入服务端数据库
+zcat /usr/share/zabbix-sql-scripts/mysql/server.sql.gz | mysql -uroot -plinux0224 zabbix
+zcat /usr/share/zabbix-sql-scripts/mysql/server.sql.gz | mysql --default-character-set=utf8mb4 -uzabbix -p zabbix
+
+
+ 4.2配置php
+ vim /etc/php.ini
+ 
+post_max_size = 16M   #由8M改为16M
+max_execution_time = 300   #由30改为300
+max_input_time = 300   #由60改为300
+
+
+4.3配置Nginx
+
+vim /etc/nginx/conf.d/zabbix.conf
+#listen 8080;
+#server_name example.com; 
+ 
+#取消注释并设置保存
+
+
+vim /etc/php.ini
+改时区
+date.timezone = Asia/Shanghai
+
+
+5.1 打开浏览器输入服务器IP或本机配置也可输入127.0.0.1:8080

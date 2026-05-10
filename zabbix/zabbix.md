@@ -198,7 +198,7 @@ cat > /etc/zabbix/zabbix_agentd.conf << 'EOF'
 PidFile=/var/run/zabbix/zabbix_agentd.pid
 LogFile=/var/log/zabbix/zabbix_agentd.log
 LogFileSize=0
-Server=192.168.88.130
+Server=192.168.146.203
 Include=/etc/zabbix/zabbix_agentd.d/*.conf
 EOF
 

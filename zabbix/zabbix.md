@@ -1,7 +1,7 @@
 Centos-7仓库源
 wget -O /etc/yum.repos.d/CentOS-Base.repo http://mirrors.aliyun.com/repo/Centos-7.repo
 
-安装zabbix的repo
+安装zabbix
 zabbix仓库：
 这是centos7系统
 rpm -ivh https://mirrors.tuna.tsinghua.edu.cn/zabbix/zabbix/4.0/rhel/7/x86_64/zabbix-release-4.0-1.el7.noarch.rpm
@@ -35,7 +35,7 @@ zcat /usr/share/doc/zabbix-server-mysql/create.sql.gz | mysql -uroot -plinux0224
 
 zcat /usr/share/doc/zabbix-server-mysql-4.0.50/create.sql.gz | mysql -uroot -plinux0224 zabbix
 这边文件太大会报错
-
+解决方案：
 vi /etc/my.cnf 配置下添加
 [mysqld]
 innodb_default_row_format = DYNAMIC
@@ -146,7 +146,7 @@ systemctl restart php-fpm
 
 
 
-访问:192.168.88.130/zabbix
+访问:192.168.146.202/zabbix
 
 默认密码
 Admin

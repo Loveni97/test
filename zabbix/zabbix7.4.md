@@ -125,3 +125,22 @@ date.timezone = Asia/Shanghai
 
 
 5.1 打开浏览器输入服务器IP或本机配置也可输入127.0.0.1:8080
+
+
+
+6.检查验证当前服务器是否安装中文包
+locale -a | grep "zh_CN"
+
+6.各个系统版本安装
+##CentOS 8
+dnf -y install glibc-langpack-zh.x86_64
+
+##CentOS 7
+yum groupinstall chinese-support -y
+
+##Ubuntu
+apt-get install language-pack-zh* -y
+
+
+1.独立搭建监控平台，包括主机，路由器，交换机等
+2.根据业务需求，自定义监控项，触发器

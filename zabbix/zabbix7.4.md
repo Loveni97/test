@@ -53,14 +53,15 @@ echo "AllowUnsupportedDBVersions=1" >> /etc/zabbix/zabbix_server.conf
 
 
 
-# 这是6.4版本
+# 这是6.0版本
 
 
 二、安装zabbix服务器前端和agent
 1安装zabbix存储库
+【6.4版本】
 rpm -Uvh https://repo.zabbix.com/zabbix/6.4/rhel/8/x86_64/zabbix-release-6.4-1.el8.noarch.rpm
 dnf clean all
-
+【6.0版本】
 rpm -Uvh https://repo.zabbix.com/zabbix/6.0/rhel/8/x86_64/zabbix-release-6.0-4.el8.noarch.rpm
 dnf clean all
 2.切换PHP的DNF模块版本
@@ -114,8 +115,8 @@ max_input_time = 300   #由60改为300
 vim /etc/nginx/conf.d/zabbix.conf
 #listen 8080;
 #server_name example.com; 
- 
-#取消注释并设置保存
+
+#这两行取消注释并设置保存
 
 
 vim /etc/php.ini

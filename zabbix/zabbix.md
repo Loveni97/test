@@ -182,6 +182,9 @@ dnf install -y glibc-langpack-zh
 1.chrony
 2.ntpdate -u ntp1.aliyun.com
 
+zabbix-agent安装路径
+https://repo.zabbix.com/zabbix/6.0/
+
 这是系统8
 rpm -ivh https://mirrors.tuna.tsinghua.edu.cn/zabbix/zabbix/4.0/rhel/8/x86_64/zabbix-agent-4.0.11-1.el8.x86_64.rpm
 

@@ -110,7 +110,7 @@ max_execution_time = 300   #由30改为300
 max_input_time = 300   #由60改为300
 
 
-4.3配置Nginx
+4.3 配置Nginx
 
 vim /etc/nginx/conf.d/zabbix.conf
 #listen 8080;
@@ -128,10 +128,10 @@ date.timezone = Asia/Shanghai
 
 
 
-6.检查验证当前服务器是否安装中文包
+6. 检查验证当前服务器是否安装中文包
 locale -a | grep "zh_CN"
 
-6.各个系统版本安装
+6. 各个系统版本安装
 ##CentOS 8
 dnf -y install glibc-langpack-zh.x86_64
 
@@ -143,4 +143,4 @@ apt-get install language-pack-zh* -y
 
 
 1.独立搭建监控平台，包括主机，路由器，交换机等
-2.根据业务需求，自定义监控项，触发器
+2.根据业务需求，自定义监控项，触发器，数据可视化

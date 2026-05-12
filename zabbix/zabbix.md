@@ -208,6 +208,29 @@ EOF
 
 systemctl start zabbix-agent && systemctl enable zabbix-agent
 
+
+主动模式
+
+cat > /etc/zabbix/zabbix_agent2.conf << 'EOF'
+PidFile=/var/run/zabbix/zabbix_agent2.pid
+LogFile=/var/log/zabbix/zabbix_agent2.log
+LogFileSize=0
+Server=192.168.146.203
+ServerActive=192.168.3.109
+Hostname=redhat-01
+Include=/etc/zabbix/zabbix_agent2.d/*.conf
+EOF
+
+删除已经安装的包
+rpm -e $(rpm -qa | grep zabbix-agent)
+
+rm -rf /etc/zabbix/zabbix_agentd.conf
+rm -rf /var/log/zabbix
+rm -rf /run/zabbix
+
+systemctl start zabbix-agent2 && systemctl enable zabbix-agent2
+
+
 在接口中写明ip地址
 ![alt text](image.png)
 

@@ -197,6 +197,78 @@ snmpwalk -v 2c -c public 192.168.146.10 sysDescr.0
 
 接收到的值 包含 Linux 
 
+# 钉钉报警
+创建群，加入机器人
+创建日志文件
+
+## 1.写好脚本
+将脚本写在/usr/lib/zabbix/alertscripts/目录下
+[root@zabbix ~]# cd /usr/lib/zabbix/alertscripts/
+ 
+##安装python或者python3
+[root@zabbix alertscripts]# yum install python3 requests json sys os datetime
+ 
+[root@zabbix alertscripts]# vim dingding.py
+
+
+## 2.为脚本添加执行权限
+[root@zabbix alertscripts]# chmod +x dingding.py
+ 
+#修改脚本的属主和属组：
+[root@zabbix alertscripts]# chown zabbix.zabbix dingding.py
+
+[root@zabbix alertscripts]# mkdir -p /usr/lib/zabbix/log/
+ 
+[root@zabbix alertscripts]# touch /usr/lib/zabbix/log/dingding.log
+ 
+[root@zabbix alertscripts]# chown zabbix.zabbix -R /usr/lib/zabbix/log/
+
+
+
+## 3. 测试
+#py脚本 手机号 关键词 告警信息
+./dingding.py 12312312312 告警 test
+
+
+## 添加动作
+配置–>动作–>创建动作
+
+
+#告警操作内容：
+
+##标题：
+服务器:{HOST.NAME}发生: {TRIGGER.NAME}故障!
+
+##消息内容：
+告警主机:{HOST.NAME}
+告警地址:{HOST.IP}
+监控项目:{ITEM.NAME}
+监控取值:{ITEM.LASTVALUE}
+告警等级:{TRIGGER.SEVERITY}
+当前状态:{TRIGGER.STATUS}
+告警信息:{TRIGGER.NAME}
+告警时间:{EVENT.DATE} {EVENT.TIME}
+事件ID:{EVENT.ID}
+ 
+ 
+#恢复操作内容
+##标题：
+服务器:{HOST.NAME}: {TRIGGER.NAME}已恢复!
+##消息内容：
+告警主机:{HOST.NAME}
+告警地址:{HOST.IP}
+监控项目:{ITEM.NAME}
+监控取值:{ITEM.LASTVALUE}
+告警等级:{TRIGGER.SEVERITY}
+当前状态:{TRIGGER.STATUS}
+告警信息:{TRIGGER.NAME}
+告警时间:{EVENT.DATE} {EVENT.TIME}
+恢复时间:{EVENT.RECOVERY.DATE} {EVENT.RECOVERY.TIME}
+持续时间:{EVENT.AGE}
+事件ID:{EVENT.ID}
+
+
+
 
 # 远程登录交换机
 

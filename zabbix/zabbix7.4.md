@@ -148,4 +148,4 @@ apt-get install language-pack-zh* -y
 
 遇到的问题：
 1.zabbix_get 命令行测试和网页能读到数据，但监测显示没有数据
-解决方法：
+解决方法：其实是主机ip给错了

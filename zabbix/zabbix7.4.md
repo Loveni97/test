@@ -142,10 +142,102 @@ yum groupinstall chinese-support -y
 apt-get install language-pack-zh* -y
 
 
+# 监测交换机
+
+## 1.进入 Vlanif1（默认管理VLAN）配置IP
+interface Vlanif 1
+ ip address 192.168.146.10 255.255.255.0
+ quit
+
+配置默认路由（如果需要访问外网，可选）
+ip route-static 0.0.0.0 0.0.0.0 192.168.146.1
+
+## 2.开启并配置 SNMP
+### 开启SNMPv2c（最通用，Zabbix默认支持）
+snmp-agent
+snmp-agent community read public   # 只读团体字，默认public，建议修改
+snmp-agent sys-info version all   # 支持所有SNMP版本
+
+### 可选：配置SNMPv3（更安全，推荐）
+snmp-agent group v3 admin privacy
+snmp-agent usm-user v3 admin admin authentication-mode sha1 Admin@123 privacy-mode aes123 Admin@123
+
+
+## 3.centos安装snmp
+yum install net-snmp net-snmp-utils
+
+### 3.1 修改团体字(交换机也需要同步改)
+com2sec notConfigUser  default       public
+com2sec notConfigUser  default       myzabbix
+
+说明：default 表示允许所有 IP 访问，也可以限制为 Zabbix 服务器 IP，
+例如：com2sec notConfigUser  192.168.146.100  myzabbix
+
+交换机修改方式：
+
+system-view
+snmp-agent community read myzabbix
+
+## 4.测试
+修改为读取所有权限
+view    systemview    included   .1
+.1 代表 整个 SNMP 树全部放开，Zabbix 想拿什么指标都能拿到
+
+华为自己的私有 OID 是：.1.3.6.1.4.1.2011
+
+snmpwalk -v 2c -c public 192.168.146.10 .1.3.6.1.4.1.2011
+
+
+
+# 对于自动发现规则
+
+## 1. 系统信息
+zabbix_get -s 192.168.146.202 -k system.uname 
+snmpwalk -v 2c -c public 192.168.146.10 sysDescr.0
+
+接收到的值 包含 Linux 
+
+
+# 远程登录交换机
+
+## ssh方式-由于交换机ssh加密算法版本太低，可能导致登录失败
+
+### 配置本地用户
+[sw02] aaa
+[sw02-aaa] local-user admin password simple Huawei@123
+[sw02-aaa] local-user admin privilege level 15
+[sw02-aaa] local-user admin service-type ssh
+[sw02-aaa] quit
+
+### 配置SSH
+[sw02] stelnet server enable
+[sw02] ssh user admin authentication-type password
+
+### 配置VTY
+[sw02] user-interface vty 0 4
+[sw02-ui-vty0-4] authentication-mode aaa
+[sw02-ui-vty0-4] protocol inbound ssh
+[sw02-ui-vty0-4] quit
+
+## telnet方式
+telnet server enable
+user-interface vty 0 4
+ authentication-mode password
+ set authentication password simple admin123
+ user privilege level 15
+ protocol inbound telnet
+quit
+
+
+登录方式telnet 192.168.146.10
+
+# 知识技能
+
 1.独立搭建监控平台，包括主机，路由器，交换机等
 2.根据业务需求，自定义监控项，触发器，数据可视化
+3.自动发现规则配置
 
 
-遇到的问题：
+# 遇到的问题：
 1.zabbix_get 命令行测试和网页能读到数据，但监测显示没有数据
 解决方法：其实是主机ip给错了

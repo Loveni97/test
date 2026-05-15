@@ -21,9 +21,9 @@ logging.basicConfig(
 )
  
 webhook = "https://oapi.dingtalk.com/robot/send?access_token=ddd766d19bf8151b84732db8bc88a9ec0f19f2bbd9791d7583397eb110f407b7"
-user = sys.argv[1]
-subject = sys.argv[2] + " "  # 确保主题与内容分离
-text = sys.argv[3]
+user = sys.argv[3]
+subject = sys.argv[1] + " "  # 确保主题与内容分离
+text = sys.argv[2]
  
 # 转义特殊字符
 safe_text = text.replace("<", "&lt;").replace(">", "&gt;")
@@ -67,7 +67,6 @@ try:
 except Exception as e:
     status = f"异常错误: {str(e)}"
     logging.error(status)
- 
 # 最终记录结果
 logging.info(f"{datetime.datetime.now()} | {user} | {status}")
 print(status)  # Zabbix需要标准输出

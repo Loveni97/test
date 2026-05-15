@@ -206,28 +206,36 @@ snmpwalk -v 2c -c public 192.168.146.10 sysDescr.0
 [root@zabbix ~]# cd /usr/lib/zabbix/alertscripts/
  
 ##安装python或者python3
-[root@zabbix alertscripts]# yum install python3 requests json sys os datetime
+[root@zabbix alertscripts]# yum install python3 
+pip3 requests json sys os datetime
  
 [root@zabbix alertscripts]# vim dingding.py
+
+
+在脚本文件夹
+ 
+
+
 
 
 ## 2.为脚本添加执行权限
 [root@zabbix alertscripts]# chmod +x dingding.py
  
 #修改脚本的属主和属组：
-[root@zabbix alertscripts]# chown zabbix.zabbix dingding.py
+[root@zabbix alertscripts]# chown zabbix:zabbix dingding.py
 
 [root@zabbix alertscripts]# mkdir -p /usr/lib/zabbix/log/
  
 [root@zabbix alertscripts]# touch /usr/lib/zabbix/log/dingding.log
  
-[root@zabbix alertscripts]# chown zabbix.zabbix -R /usr/lib/zabbix/log/
+[root@zabbix alertscripts]# chown zabbix:zabbix -R /usr/lib/zabbix/log/
 
 
 
 ## 3. 测试
 #py脚本 手机号 关键词 告警信息
 ./dingding.py 12312312312 告警 test
+这边需要注意zabbix6.0这边页面测试需要将参数改为 3 1 2 ,这样才能对应
 
 
 ## 添加动作
@@ -269,6 +277,19 @@ snmpwalk -v 2c -c public 192.168.146.10 sysDescr.0
 
 
 
+Resolved in {EVENT.DURATION}: {EVENT.NAME}
+
+
+
+Problem has been resolved at {EVENT.RECOVERY.TIME} on {EVENT.RECOVERY.DATE}
+Problem name: {EVENT.NAME}
+Problem duration: {EVENT.DURATION}
+Host: {HOST.NAME}
+Severity: {EVENT.SEVERITY}
+Original problem ID: {EVENT.ID}
+{TRIGGER.URL}
+
+
 
 # 远程登录交换机
 
@@ -307,7 +328,8 @@ quit
 
 1.独立搭建监控平台，包括主机，路由器，交换机等
 2.根据业务需求，自定义监控项，触发器，数据可视化
-3.自动发现规则配置
+3.数据可视化‌：提供折线图、柱状图、饼图、拓扑图、地图等多种可视化形式
+4.支持邮件、短信、钉钉、微信等多种通知方式，并可配置告警升级策略
 
 
 # 遇到的问题：

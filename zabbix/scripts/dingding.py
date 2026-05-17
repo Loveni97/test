@@ -27,7 +27,10 @@ text = sys.argv[2]
  
 # 转义特殊字符
 safe_text = text.replace("<", "&lt;").replace(">", "&gt;")
- 
+
+isAtAll=False
+if user=='@all':
+    isAtAll=True
 data = {
     "msgtype": "text",
     "text": {
@@ -35,7 +38,7 @@ data = {
     },
     "at": {
         "atMobiles": [user],
-        "isAtAll": False
+        "isAtAll": isAtAll
     }
 }
  

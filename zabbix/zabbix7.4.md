@@ -187,6 +187,8 @@ view    systemview    included   .1
 
 snmpwalk -v 2c -c public 192.168.146.10 .1.3.6.1.4.1.2011
 
+## 测试CPU
+for i in {1..6}; do while :; do :; done & sleep 3600; kill %$i; done
 
 
 # 对于自动发现规则

@@ -69,7 +69,7 @@ dnf module switch-to php:7.4
 
 3.安装Zabbix server,web前端，agent
 
-dnf install zabbix-server-mysql zabbix-web-mysql zabbix-nginx-conf zabbix-sql-scripts zabbix-selinux-policy zabbix-agent
+dnf install -y zabbix-server-mysql zabbix-web-mysql zabbix-nginx-conf zabbix-sql-scripts zabbix-selinux-policy zabbix-agent
 
 三、安装和配置数据库
 

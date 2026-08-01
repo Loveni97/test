@@ -69,7 +69,6 @@ ExternalScripts=/usr/lib/zabbix/externalscripts
 LogSlowQueries=3000
 
 cat > /etc/zabbix/zabbix_server.conf <<'EOF'
-
 LogFile=/var/log/zabbix/zabbix_server.log
 LogFileSize=0
 PidFile=/var/run/zabbix/zabbix_server.pid

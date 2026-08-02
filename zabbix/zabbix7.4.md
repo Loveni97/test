@@ -248,8 +248,10 @@ pip3 requests json sys os datetime
 
 ##标题：
 服务器:{HOST.NAME}发生: {TRIGGER.NAME}故障!
+[主题:] 服务器:{HOST.NAME}发生: {TRIGGER.NAME}故障!
 
 ##消息内容：
+[内容:]
 告警主机:{HOST.NAME}
 告警地址:{HOST.IP}
 监控项目:{ITEM.NAME}
@@ -263,8 +265,9 @@ pip3 requests json sys os datetime
  
 #恢复操作内容
 ##标题：
-服务器:{HOST.NAME}: {TRIGGER.NAME}已恢复!
+[主题:] 服务器:{HOST.NAME}: {TRIGGER.NAME}已恢复!
 ##消息内容：
+[内容:]
 告警主机:{HOST.NAME}
 告警地址:{HOST.IP}
 监控项目:{ITEM.NAME}

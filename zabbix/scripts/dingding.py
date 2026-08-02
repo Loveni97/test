@@ -8,7 +8,7 @@ import datetime
 import logging
  
 # 配置日志（修复路径）
-LOG_FILE = "/usr/lib/zabbix/alertscripts/log/dingding.log"
+LOG_FILE = "/usr/lib/zabbix/log/dingding.log"
 LOG_DIR = os.path.dirname(LOG_FILE)
  
 if not os.path.exists(LOG_DIR):

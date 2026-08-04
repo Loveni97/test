@@ -210,6 +210,13 @@ systemctl start zabbix-agent && systemctl enable zabbix-agent
 
 主动模式
 
+服务器端修改配置
+1.调大主动模式处理线程（zabbix_server.conf）
+StartTrappers=20 # 接收Agent上报的工作线程，500台给到20~30足够
+2.文件句柄数放开，避免连接打满：
+ulimit -n 65535
+
+3.修改客户端配置
 cat > /etc/zabbix/zabbix_agent2.conf << 'EOF'
 PidFile=/var/run/zabbix/zabbix_agent2.pid
 LogFile=/var/log/zabbix/zabbix_agent2.log
@@ -217,8 +224,11 @@ LogFileSize=0
 Server=192.168.146.203
 ServerActive=192.168.3.109
 Hostname=redhat-01
+ListenPort=0
 Include=/etc/zabbix/zabbix_agent2.d/*.conf
 EOF
+
+Hostname需要和网页配置host时名称一致
 
 删除已经安装的包
 rpm -e $(rpm -qa | grep zabbix-agent)

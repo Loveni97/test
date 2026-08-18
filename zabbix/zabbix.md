@@ -224,7 +224,7 @@ LogFileSize=0
 Server=192.168.146.203
 ServerActive=192.168.3.109
 Hostname=redhat-01
-ListenPort=0
+ListenPort=10050
 Include=/etc/zabbix/zabbix_agent2.d/*.conf
 EOF
 

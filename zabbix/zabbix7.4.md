@@ -252,15 +252,15 @@ pip3 requests json sys os datetime
 
 ##消息内容：
 [内容:]
-告警主机:{HOST.NAME}
-告警地址:{HOST.IP}
-监控项目:{ITEM.NAME}
-监控取值:{ITEM.LASTVALUE}
-告警等级:{TRIGGER.SEVERITY}
-当前状态:{TRIGGER.STATUS}
-告警信息:{TRIGGER.NAME}
-告警时间:{EVENT.DATE} {EVENT.TIME}
-事件ID:{EVENT.ID}
+告警主机: {HOST.NAME}
+告警地址: {HOST.IP}
+监控项目: {ITEM.NAME}
+监控取值: {ITEM.LASTVALUE}
+告警等级: {TRIGGER.SEVERITY}
+当前状态: {TRIGGER.STATUS}
+告警信息: {TRIGGER.NAME}
+告警时间: {EVENT.DATE} {EVENT.TIME}
+事件ID: {EVENT.ID}
  
  
 #恢复操作内容
